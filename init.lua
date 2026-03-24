@@ -11,6 +11,16 @@ vim.g.loaded_netrwPlugin = 1
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
+-- Use PowerShell 7+ as the shell on Windows
+if vim.fn.has 'win32' == 1 then
+  vim.o.shell = 'pwsh'
+  vim.o.shellcmdflag = "-NoLogo -NonInteractive -ExecutionPolicy RemoteSigned -Command $PSStyle.OutputRendering='PlainText';"
+  vim.o.shellquote = ''
+  vim.o.shellxquote = ''
+  vim.o.shellpipe = '| Out-File -Encoding UTF8 %s'
+  vim.o.shellredir = '| Out-File -Encoding UTF8 %s'
+end
+
 -- [[ Setting options ]]
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
@@ -98,8 +108,8 @@ vim.diagnostic.config {
   underline = { severity = { min = vim.diagnostic.severity.WARN } },
 
   -- Can switch between these as you prefer
-  virtual_text = true, -- Text shows up at the end of the line
-  virtual_lines = false, -- Text shows up underneath the line, with virtual lines
+  virtual_text = false, -- Text shows up at the end of the line
+  virtual_lines = true, -- Text shows up underneath the line, with virtual lines
 
   -- Auto open the float, so you can easily read the errors when jumping with `[d` and `]d`
   jump = { float = true },
