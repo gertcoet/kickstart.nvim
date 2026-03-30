@@ -210,7 +210,7 @@ rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added via a link or github org/name. To run setup automatically, use `opts = {}`
-  { 'NMAC427/guess-indent.nvim', opts = {} },
+  { 'NMAC427/guess-indent.nvim', event = 'BufReadPost', opts = {} },
 
   -- Alternatively, use `config = function() ... end` for full control over the configuration.
   -- If you prefer to call `setup` explicitly, use:
@@ -229,6 +229,7 @@ require('lazy').setup({
   -- See `:help gitsigns` to understand what the configuration keys do
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
+    event = 'BufReadPost',
     ---@module 'gitsigns'
     ---@type Gitsigns.Config
     ---@diagnostic disable-next-line: missing-fields
@@ -297,7 +298,23 @@ require('lazy').setup({
     -- it’s best to remove the Telescope plugin config entirely
     -- instead of just disabling it here, to keep your config clean.
     enabled = true,
-    event = 'VimEnter',
+    keys = {
+      { '<leader>sh', desc = '[S]earch [H]elp' },
+      { '<leader>sk', desc = '[S]earch [K]eymaps' },
+      { '<leader>sf', desc = '[S]earch [F]iles' },
+      { '<leader>ss', desc = '[S]earch [S]elect Telescope' },
+      { '<leader>sw', desc = '[S]earch current [W]ord', mode = { 'n', 'v' } },
+      { '<leader>sg', desc = '[S]earch by [G]rep' },
+      { '<leader>sd', desc = '[S]earch [D]iagnostics' },
+      { '<leader>sr', desc = '[S]earch [R]esume' },
+      { '<leader>s.', desc = '[S]earch Recent Files' },
+      { '<leader>sc', desc = '[S]earch [C]ommands' },
+      { '<leader><leader>', desc = '[ ] Find existing buffers' },
+      { '<leader>/', desc = '[/] Fuzzily search in current buffer' },
+      { '<leader>s/', desc = '[S]earch [/] in Open Files' },
+      { '<leader>sn', desc = '[S]earch [N]eovim files' },
+    },
+    cmd = { 'Telescope' },
     dependencies = {
       'nvim-lua/plenary.nvim',
       { -- If encountering errors, see telescope-fzf-native README for installation instructions
@@ -437,6 +454,7 @@ require('lazy').setup({
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
+    event = 'BufReadPost',
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
       -- Mason must be loaded before its dependents so we need to set it up here.
@@ -453,7 +471,7 @@ require('lazy').setup({
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim', event = 'LspAttach', opts = {} },
     },
     config = function()
       -- Brief aside: **What is LSP?**
@@ -661,7 +679,7 @@ require('lazy').setup({
 
   { -- Autocompletion
     'saghen/blink.cmp',
-    event = 'VimEnter',
+    event = { 'InsertEnter', 'CmdlineEnter' },
     version = '1.*',
     dependencies = {
       -- Snippet Engine
@@ -777,7 +795,7 @@ require('lazy').setup({
   -- Highlight todo, notes, etc in comments
   {
     'folke/todo-comments.nvim',
-    event = 'VimEnter',
+    event = 'BufReadPost',
     dependencies = { 'nvim-lua/plenary.nvim' },
     ---@module 'todo-comments'
     ---@type TodoOptions
